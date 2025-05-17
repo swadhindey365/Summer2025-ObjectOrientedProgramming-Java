@@ -1,0 +1,22 @@
+package swadhin;
+class workers{
+    String name;
+    String age;
+    public void printinfo(){
+        System.out.println(this.name);
+        System.out.println(this.age);
+    }
+}
+public class Swadhin{
+    public static void main(String args[]){
+        workers n1 = new workers();
+        workers n2 = new workers();
+        n1.name="Swadhin";
+        n1.age="21";
+        n2.name="Arindom";
+        n2.age="21";
+        
+        n1.printinfo();
+        n2.printinfo();
+    } 
+}
