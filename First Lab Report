@@ -1,0 +1,48 @@
+// Print Hello World in java
+Package applicationofjava;
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Swadhin");
+    }
+}
+
+
+//Read 2 integers from user and multiply both in third varible and print
+Package applicationofjava;
+import java.util.Scanner;
+public class MultiplyTwoNumbers {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter first number: ");
+        int a = scanner.nextInt();
+        System.out.print("Enter second number: ");
+        int b = scanner.nextInt();
+        int result = a * b;
+        System.out.println("Multiplication result: " + result);
+    }
+}
+
+
+//Read 2 array one int and another float from user.Now Multiply both array in a float array devide by 10 and print the third arrray
+Package applicationofjava;
+import java.util.Scanner;
+public class ArrayMultiply {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int[] arr1 = new int[2];
+        float[] arr2 = new float[2];
+        float[] arr3 = new float[2];
+        System.out.println("Enter 2 integers for arr1:");
+        for (int i = 0; i < 2; i++) {
+            arr1[i] = scanner.nextInt();
+        }
+        System.out.println("Enter 2 floats for arr2:");
+        for (int i = 0; i < 2; i++) {
+            arr2[i] = scanner.nextFloat();}
+        for (int i = 0; i < 2; i++) {
+            arr3[i] = (arr1[i] * arr2[i]) / 10; }
+        System.out.println("Resulting arr3 values:");
+        for (int i = 0; i < 2; i++) {
+            System.out.println("arr3[" + i + "] = " + arr3[i]);
+        }
+}}
