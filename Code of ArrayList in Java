@@ -1,0 +1,21 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+public class java1{
+    public static void main(String args[]){
+        ArrayList<Integer>arr_1=new ArrayList<Integer>();
+        Scanner obj=new Scanner(System.in);
+        
+        System.out.print("Enter the size of array : " );
+        int cut=obj.nextInt();  
+         
+        System.out.print("Enter thr vslues of array : ");
+        for(int i=0;i<cut;i++){
+            arr_1.add(obj.nextInt());
+        }
+
+        System.out.print("The values of array are : ");
+        for( int number : arr_1){
+           System.out.print(number + " ");
+        }
+    }
+}
