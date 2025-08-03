@@ -1,0 +1,551 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.regex.Pattern;
+
+// Abstract User class for common attributes
+abstract class User {
+    protected String username;
+    protected String password;
+    protected String email;
+
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public boolean validatePassword(String password) {
+        return this.password.equals(password);
+    }
+}
+
+// Patient class
+class Patient extends User {
+    private String phoneNumber;
+
+    public Patient(String username, String password, String email, String phoneNumber) {
+        super(username, password, email);
+        this.phoneNumber = phoneNumber;
+    }
+
+    public static boolean isValidPhoneNumber(String phone) {
+        return Pattern.matches("^\\+8801[3-9]\\d{8}$", phone);
+    }
+
+    public static boolean isValidEmail(String email) {
+        return Pattern.matches("^[A-Za-z0-9+_.-]+@(.+)$", email);
+    }
+}
+
+// Hospital class
+class Hospital {
+    private String name;
+    private String licenseNumber;
+    private String district;
+    private String address;
+    private String username;
+    private String password;
+    private int economyBeds;
+    private int vipBeds;
+    private int icuBeds;
+    private String emergencyContact;
+    private String customerCareContact;
+    private boolean qualityAgreement;
+    private boolean transparencyAgreement;
+    private boolean isVerified;
+
+    public Hospital(String name, String licenseNumber, String district, String address,
+                    String username, String password, int economyBeds, int vipBeds,
+                    int icuBeds, String emergencyContact, String customerCareContact,
+                    boolean qualityAgreement, boolean transparencyAgreement) {
+        this.name = name;
+        this.licenseNumber = licenseNumber;
+        this.district = district;
+        this.address = address;
+        this.username = username;
+        this.password = password;
+        this.economyBeds = economyBeds;
+        this.vipBeds = vipBeds;
+        this.icuBeds = icuBeds;
+        this.emergencyContact = emergencyContact;
+        this.customerCareContact = customerCareContact;
+        this.qualityAgreement = qualityAgreement;
+        this.transparencyAgreement = transparencyAgreement;
+        this.isVerified = false;
+    }
+
+    // Getters and setters
+    public String getName() { return name; }
+    public String getLicenseNumber() { return licenseNumber; }
+    public String getDistrict() { return district; }
+    public String getAddress() { return address; }
+    public String getUsername() { return username; }
+    public int getEconomyBeds() { return economyBeds; }
+    public int getVipBeds() { return vipBeds; }
+    public int getIcuBeds() { return icuBeds; }
+    public String getEmergencyContact() { return emergencyContact; }
+    public String getCustomerCareContact() { return customerCareContact; }
+    public boolean isVerified() { return isVerified; }
+    public boolean validatePassword(String password) { return this.password.equals(password); }
+
+    public void setVerified(boolean verified) { this.isVerified = verified; }
+    public void setEconomyBeds(int beds) { this.economyBeds = beds; }
+    public void setVipBeds(int beds) { this.vipBeds = beds; }
+    public void setIcuBeds(int beds) { this.icuBeds = beds; }
+    public void setEmergencyContact(String contact) { this.emergencyContact = contact; }
+    public void setCustomerCareContact(String contact) { this.customerCareContact = contact; }
+
+    public static boolean isValidLicenseNumber(String license) {
+        return Pattern.matches("^HOSP-[A-Z]{3}-\\d{6}$", license);
+    }
+
+    public void displayDetails() {
+        System.out.println("\nHospital Details:");
+        System.out.println("Name: " + name);
+        System.out.println("Address: " + address + ", " + district);
+        System.out.println("Bed Availability - Economy: " + economyBeds + ", VIP: " + vipBeds + ", ICU: " + icuBeds);
+        System.out.println("Emergency Contact: " + emergencyContact);
+        System.out.println("Customer Care: " + customerCareContact);
+    }
+}
+
+// Admin class
+class Admin extends User {
+    public Admin(String username, String password, String email) {
+        super(username, password, email);
+    }
+}
+
+// Database class to handle internal storage
+class Database {
+    private ArrayList<Patient> patients = new ArrayList<>();
+    private ArrayList<Hospital> hospitals = new ArrayList<>();
+    private Admin admin;
+    private String[] districts = {"Dhaka", "Chittagong", "Rajshahi", "Khulna", "Cumilla" /* ... add other districts ... */};
+
+    public Database() {
+        // Initialize admin
+        admin = new Admin("admin", "admin12345", "admin@hospital.com");
+
+        // Initialize 3 verified hospitals in Dhaka
+        hospitals.add(new Hospital(
+                "Dhaka Medical College Hospital", "HOSP-DHK-123456", "Dhaka", "Shahbag, Dhaka",
+                "dmch", "hospital12345", 200, 50, 30, "+8801712345678", "+8801712345679",
+                true, true
+        ));
+        hospitals.get(0).setVerified(true);
+
+        hospitals.add(new Hospital(
+                "Apollo Hospital Dhaka", "HOSP-DHK-123457", "Dhaka", "Bashundhara, Dhaka",
+                "apollo", "hospital12345", 150, 80, 40, "+8801712345680", "+8801712345681",
+                true, true
+        ));
+        hospitals.get(1).setVerified(true);
+
+        hospitals.add(new Hospital(
+                "Square Hospital", "HOSP-DHK-123458", "Dhaka", "Panthapath, Dhaka",
+                "square", "hospital12345", 180, 60, 35, "+8801712345682", "+8801712345683",
+                true, true
+        ));
+        hospitals.get(2).setVerified(true);
+
+        // Initialize 2 verified hospitals in Cumilla
+        hospitals.add(new Hospital(
+                "Cumilla Medical Center", "HOSP-CML-123459", "Cumilla", "Racecourse, Cumilla",
+                "cumillamed", "hospital12345", 100, 30, 20, "+8801712345684", "+8801712345685",
+                true, true
+        ));
+        hospitals.get(3).setVerified(true);
+
+        hospitals.add(new Hospital(
+                "Moon Hospital Cumilla", "HOSP-CML-123460", "Cumilla", "Jhawtala, Cumilla",
+                "moonhosp", "hospital12345", 120, 40, 25, "+8801712345686", "+8801712345687",
+                true, true
+        ));
+        hospitals.get(4).setVerified(true);
+
+        // Initialize 2 pending hospitals
+        hospitals.add(new Hospital(
+                "City Hospital Dhaka", "HOSP-DHK-123461", "Dhaka", "Dhanmondi, Dhaka",
+                "cityhosp", "hospital12345", 90, 20, 15, "+8801712345688", "+8801712345689",
+                true, true
+        ));
+
+        hospitals.add(new Hospital(
+                "Green Life Hospital", "HOSP-DHK-123462", "Dhaka", "Green Road, Dhaka",
+                "greenlife", "hospital12345", 110, 25, 20, "+8801712345690", "+8801712345691",
+                true, true
+        ));
+    }
+
+    public void addPatient(Patient patient) {
+        patients.add(patient);
+    }
+
+    public void addHospital(Hospital hospital) {
+        hospitals.add(hospital);
+    }
+
+    public Patient findPatient(String username, String password) {
+        for (Patient patient : patients) {
+            if (patient.getUsername().equals(username) && patient.validatePassword(password)) {
+                return patient;
+            }
+        }
+        return null;
+    }
+
+    public Hospital findHospital(String username, String password) {
+        for (Hospital hospital : hospitals) {
+            if (hospital.getUsername().equals(username) && hospital.validatePassword(password)) {
+                return hospital;
+            }
+        }
+        return null;
+    }
+
+    public Admin getAdmin(String username, String password) {
+        return (admin.getUsername().equals(username) && admin.validatePassword(password)) ? admin : null;
+    }
+
+    public ArrayList<Hospital> getHospitalsByDistrict(String district) {
+        ArrayList<Hospital> result = new ArrayList<>();
+        for (Hospital hospital : hospitals) {
+            if (hospital.getDistrict().equalsIgnoreCase(district) && hospital.isVerified()) {
+                result.add(hospital);
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<Hospital> searchHospitalsByName(String name) {
+        ArrayList<Hospital> result = new ArrayList<>();
+        for (Hospital hospital : hospitals) {
+            if (hospital.getName().toLowerCase().contains(name.toLowerCase()) && hospital.isVerified()) {
+                result.add(hospital);
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<Hospital> getPendingHospitals() {
+        ArrayList<Hospital> result = new ArrayList<>();
+        for (Hospital hospital : hospitals) {
+            if (!hospital.isVerified()) {
+                result.add(hospital);
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<Hospital> getVerifiedHospitals() {
+        ArrayList<Hospital> result = new ArrayList<>();
+        for (Hospital hospital : hospitals) {
+            if (hospital.isVerified()) {
+                result.add(hospital);
+            }
+        }
+        return result;
+    }
+
+    public String[] getDistricts() {
+        return districts;
+    }
+}
+
+// Main Hospital Management System class
+public class HospitalManagementSystem {
+    private static Database database = new Database();
+    private static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        while (true) {
+            System.out.println("\n=== Hospital Management System ===");
+            System.out.println("1. Patient Login");
+            System.out.println("2. Patient Register");
+            System.out.println("3. Hospital Login");
+            System.out.println("4. Hospital Register");
+            System.out.println("5. Admin Login");
+            System.out.println("6. Exit");
+            System.out.print("Choose an option: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1:
+                    patientLogin();
+                    break;
+                case 2:
+                    patientRegister();
+                    break;
+                case 3:
+                    hospitalLogin();
+                    break;
+                case 4:
+                    hospitalRegister();
+                    break;
+                case 5:
+                    adminLogin();
+                    break;
+                case 6:
+                    System.out.println("Exiting...");
+                    return;
+                default:
+                    System.out.println("Invalid option!");
+            }
+        }
+    }
+
+    private static void patientRegister() {
+        System.out.print("Enter username: ");
+        String username = scanner.nextLine();
+        System.out.print("Enter email: ");
+        String email = scanner.nextLine();
+        System.out.print("Enter phone number (+8801XXXXXXXXX): ");
+        String phone = scanner.nextLine();
+        System.out.print("Enter password (min 8 chars): ");
+        String password = scanner.nextLine();
+
+        if (!Patient.isValidEmail(email)) {
+            System.out.println("Invalid email format!");
+            return;
+        }
+        if (!Patient.isValidPhoneNumber(phone)) {
+            System.out.println("Invalid phone number format!");
+            return;
+        }
+        if (password.length() < 8) {
+            System.out.println("Password must be at least 8 characters!");
+            return;
+        }
+
+        Patient patient = new Patient(username, password, email, phone);
+        database.addPatient(patient);
+        System.out.println("Registration successful!");
+    }
+
+    private static void patientLogin() {
+        System.out.print("Enter username: ");
+        String username = scanner.nextLine();
+        System.out.print("Enter password: ");
+        String password = scanner.nextLine();
+
+        Patient patient = database.findPatient(username, password);
+        if (patient == null) {
+            System.out.println("Invalid credentials!");
+            return;
+        }
+
+        while (true) {
+            System.out.println("\n=== Patient Panel ===");
+            System.out.println("1. Find Hospitals by District");
+            System.out.println("2. Search Hospitals by Name");
+            System.out.println("3. Logout");
+            System.out.print("Choose an option: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            if (choice == 3) break;
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter district: ");
+                    String district = scanner.nextLine();
+                    ArrayList<Hospital> hospitals = database.getHospitalsByDistrict(district);
+                    displayHospitals(hospitals);
+                    break;
+                case 2:
+                    System.out.print("Enter hospital name: ");
+                    String name = scanner.nextLine();
+                    hospitals = database.searchHospitalsByName(name);
+                    displayHospitals(hospitals);
+                    break;
+                default:
+                    System.out.println("Invalid option!");
+            }
+        }
+    }
+
+    private static void hospitalRegister() {
+        System.out.print("Enter hospital name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter license number (HOSP-XXX-123456): ");
+        String license = scanner.nextLine();
+        System.out.print("Enter district: ");
+        String district = scanner.nextLine();
+        System.out.print("Enter address: ");
+        String address = scanner.nextLine();
+        System.out.print("Enter username: ");
+        String username = scanner.nextLine();
+        System.out.print("Enter password (min 8 chars): ");
+        String password = scanner.nextLine();
+        System.out.print("Enter economy beds: ");
+        int economyBeds = scanner.nextInt();
+        System.out.print("Enter VIP beds: ");
+        int vipBeds = scanner.nextInt();
+        System.out.print("Enter ICU beds: ");
+        int icuBeds = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("Enter emergency contact: ");
+        String emergency = scanner.nextLine();
+        System.out.print("Enter customer care contact: ");
+        String customerCare = scanner.nextLine();
+        System.out.print("Agree to Quality Healthcare (y/n): ");
+        boolean quality = scanner.nextLine().equalsIgnoreCase("y");
+        System.out.print("Agree to Transparency (y/n): ");
+        boolean transparency = scanner.nextLine().equalsIgnoreCase("y");
+
+        if (!Hospital.isValidLicenseNumber(license)) {
+            System.out.println("Invalid license number format!");
+            return;
+        }
+        if (password.length() < 8) {
+            System.out.println("Password must be at least 8 characters!");
+            return;
+        }
+
+        Hospital hospital = new Hospital(name, license, district, address, username, password,
+                economyBeds, vipBeds, icuBeds, emergency, customerCare, quality, transparency);
+        database.addHospital(hospital);
+        System.out.println("Registration successful! Waiting for admin approval.");
+    }
+
+    private static void hospitalLogin() {
+        System.out.print("Enter username: ");
+        String username = scanner.nextLine();
+        System.out.print("Enter password: ");
+        String password = scanner.nextLine();
+
+        Hospital hospital = database.findHospital(username, password);
+        if (hospital == null) {
+            System.out.println("Invalid credentials!");
+            return;
+        }
+
+        if (!hospital.isVerified()) {
+            System.out.println("Waiting for admin approval");
+            return;
+        }
+
+        while (true) {
+            System.out.println("\n=== Hospital Panel ===");
+            System.out.println("1. Update Bed Information");
+            System.out.println("2. Update Contact Information");
+            System.out.println("3. View Details");
+            System.out.println("4. Logout");
+            System.out.print("Choose an option: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            if (choice == 4) break;
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter economy beds: ");
+                    hospital.setEconomyBeds(scanner.nextInt());
+                    System.out.print("Enter VIP beds: ");
+                    hospital.setVipBeds(scanner.nextInt());
+                    System.out.print("Enter ICU beds: ");
+                    hospital.setIcuBeds(scanner.nextInt());
+                    scanner.nextLine();
+                    System.out.println("Bed information updated!");
+                    break;
+                case 2:
+                    System.out.print("Enter emergency contact: ");
+                    hospital.setEmergencyContact(scanner.nextLine());
+                    System.out.print("Enter customer care contact: ");
+                    hospital.setCustomerCareContact(scanner.nextLine());
+                    System.out.println("Contact information updated!");
+                    break;
+                case 3:
+                    hospital.displayDetails();
+                    break;
+                default:
+                    System.out.println("Invalid option!");
+            }
+        }
+    }
+
+    private static void adminLogin() {
+        System.out.print("Enter username: ");
+        String username = scanner.nextLine();
+        System.out.print("Enter password: ");
+        String password = scanner.nextLine();
+
+        Admin admin = database.getAdmin(username, password);
+        if (admin == null) {
+            System.out.println("Invalid credentials!");
+            return;
+        }
+
+        while (true) {
+            System.out.println("\n=== Admin Panel ===");
+            System.out.println("1. View Verified Hospitals");
+            System.out.println("2. View Pending Hospitals");
+            System.out.println("3. Approve/Reject Hospital");
+            System.out.println("4. Logout");
+            System.out.print("Choose an option: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            if (choice == 4) break;
+
+            switch (choice) {
+                case 1:
+                    displayHospitals(database.getVerifiedHospitals());
+                    break;
+                case 2:
+                    displayHospitals(database.getPendingHospitals());
+                    break;
+                case 3:
+                    ArrayList<Hospital> pending = database.getPendingHospitals();
+                    if (pending.isEmpty()) {
+                        System.out.println("No pending hospitals!");
+                        break;
+                    }
+                    System.out.println("\nPending Hospitals:");
+                    for (int i = 0; i < pending.size(); i++) {
+                        System.out.println((i + 1) + ". " + pending.get(i).getName() + " (" + pending.get(i).getLicenseNumber() + ")");
+                    }
+                    System.out.print("Select hospital number: ");
+                    int index = scanner.nextInt() - 1;
+                    scanner.nextLine();
+                    if (index >= 0 && index < pending.size()) {
+                        Hospital h = pending.get(index);
+                        h.displayDetails();
+                        System.out.print("Approve? (y/n): ");
+                        if (scanner.nextLine().equalsIgnoreCase("y")) {
+                            h.setVerified(true);
+                            System.out.println("Hospital approved!");
+                        } else {
+                            database.getPendingHospitals().remove(h);
+                            System.out.println("Hospital rejected!");
+                        }
+                    } else {
+                        System.out.println("Invalid selection!");
+                    }
+                    break;
+                default:
+                    System.out.println("Invalid option!");
+            }
+        }
+    }
+
+    private static void displayHospitals(ArrayList<Hospital> hospitals) {
+        if (hospitals.isEmpty()) {
+            System.out.println("No hospitals found!");
+            return;
+        }
+        for (Hospital hospital : hospitals) {
+            hospital.displayDetails();
+        }
+    }
+}
