@@ -1,0 +1,40 @@
+🏥 Hospital Information & Management System
+This Java OOP + JavaFX-based project is a Hospital Information & Management System designed to bridge the gap between the public, hospitals, and administrative verification. It enables users to find verified hospitals in their district, allows hospitals to register and update bed/contact information, and provides an admin panel for verifying or rejecting hospital requests.
+
+📌 Project Modules
+👤 User Panel (Public/Patients)
+Register with name, email, phone, and password
+
+Login securely
+
+Select a district to filter nearby hospitals
+
+Search hospitals by name
+
+View only verified hospitals
+
+View hospital details like:
+
+Address
+
+Bed availability (Economic, VIP, ICU)
+
+Emergency & Customer Care contact
+
+🏨 Hospital Panel
+Register hospital with required information:
+
+Name, address, contacts, bed info, license, etc.
+
+Login
+
+Update bed information (e.g., ICU, VIP, Economic)
+
+Update contact information
+
+🔐 Admin Panel
+Login
+
+View list of pending hospitals
+
+Approve or reject hospital registrations
